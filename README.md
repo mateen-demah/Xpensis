@@ -1,6 +1,6 @@
 # xpensis
 
-A new Flutter application.
+This is a flutter application that enable people keep track of their expenses by recording them in the app and have something to look back on. It's still in the works and not finished. I started this project as part of my flutter learning process and so the code is not optimised or documented properly. 
 
 ## Getting Started
 

@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:xpensis/providers/transactionListProvider.dart';
 
 import '../models/transaction.dart';
 
 class Chart extends StatefulWidget {
-  final List<Transaction> recentTransactions;
-
-  Chart(this.recentTransactions);
-
   @override
   State<StatefulWidget> createState() => ChartState();
 }
 
 class ChartState extends State<Chart> {
+  TransactionListProvider transactionListProvider;
+
   double get spendingForPastWeek {
-    return widget.recentTransactions
+    return transactionListProvider.recentTransactions
         .fold(0.0, (previousSum, trans) => trans.amount + previousSum);
   }
 
   List<Map<String, Object>> get groupedTransactions {
     return List.generate(7, (index) {
       final date = DateTime.now().subtract(Duration(days: index));
-      final daySpending = widget.recentTransactions.fold(
+      final daySpending = transactionListProvider.recentTransactions.fold(
         0.0,
         (prev, trans) {
           final transAmount = trans.date.day == date.day ? trans.amount : 0;
@@ -31,11 +31,18 @@ class ChartState extends State<Chart> {
       return {
         'day': date,
         'amount': daySpending,
-        'fractionOfWeekSpending': widget.recentTransactions.length > 0
-            ? daySpending / spendingForPastWeek
-            : 0.0,
+        'fractionOfWeekSpending':
+            transactionListProvider.recentTransactions.length > 0
+                ? daySpending / spendingForPastWeek
+                : 0.0,
       };
     }).reversed.toList();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    transactionListProvider = Provider.of<TransactionListProvider>(context);
   }
 
   @override

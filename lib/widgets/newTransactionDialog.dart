@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:xpensis/providers/transactionListProvider.dart';
 
 class NewTransactionDialog extends StatefulWidget {
-  final Function addTx;
-
-  NewTransactionDialog(this.addTx);
-
   @override
   _NewTransactionDialogState createState() => _NewTransactionDialogState();
 }
@@ -31,7 +29,10 @@ class _NewTransactionDialogState extends State<NewTransactionDialog> {
       return;
     }
 
-    widget.addTx(
+    final transactionListProvider =
+        Provider.of<TransactionListProvider>(context, listen: false);
+
+    transactionListProvider.addTransaction(
       title: titleController.text,
       amount: double.parse(amountController.text),
       selectedDate: selectedDate,
@@ -47,6 +48,7 @@ class _NewTransactionDialogState extends State<NewTransactionDialog> {
         vertical: 5,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             decoration: InputDecoration(

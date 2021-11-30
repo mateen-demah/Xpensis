@@ -71,7 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     print(
         '${MediaQuery.of(context).size.height} ${MediaQuery.of(context).size.width}');
-
+    final portrait =
+        MediaQuery.of(context).size.height > MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -87,37 +88,81 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: transactions.isEmpty
+      body: portrait
           ? Column(
               children: [
                 Chart(recentTransactions),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(10),
-                  child: Text(
-                    'No transactions yet',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(50),
-                    child: Image.asset(
-                      "assets/images/waiting.png",
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                )
+                transactions.isEmpty
+                    ? Flexible(
+                        fit: FlexFit.loose,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              margin: EdgeInsets.all(10),
+                              child: Text(
+                                'No transactions yet',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: Padding(
+                                padding: EdgeInsets.all(50),
+                                child: Image.asset(
+                                  "assets/images/waiting.png",
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : UserTransactions(transactions, deleteTransaction),
               ],
             )
-          : Column(children: <Widget>[
-              Chart(recentTransactions),
-              UserTransactions(transactions, deleteTransaction),
-            ]),
+          : Row(
+              children: [
+                Chart(recentTransactions),
+                transactions.isEmpty
+                    ? Flexible(
+                        fit: FlexFit.loose,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              margin: EdgeInsets.all(10),
+                              child: Text(
+                                'No transactions yet',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: Padding(
+                                padding: EdgeInsets.all(50),
+                                child: Image.asset(
+                                  "assets/images/waiting.png",
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : UserTransactions(transactions, deleteTransaction),
+              ],
+            ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         tooltip: "add transaction",

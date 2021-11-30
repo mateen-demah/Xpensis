@@ -40,6 +40,8 @@ class ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
+    final portrait =
+        MediaQuery.of(context).size.height > MediaQuery.of(context).size.width;
     return Card(
       elevation: 6,
       margin: EdgeInsets.symmetric(
@@ -47,13 +49,21 @@ class ChartState extends State<Chart> {
         horizontal: 7,
       ),
       child: Container(
-        height: 150,
+        height: portrait
+            ? MediaQuery.of(context).size.height * 0.2
+            : double.infinity,
+        width: portrait
+            ? double.infinity
+            : MediaQuery.of(context).size.width * 0.4,
         padding: const EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: groupedTransactions.map((transForDay) {
             return Flexible(
-              flex: 1,
+              flex: DateTime.now().weekday ==
+                      (transForDay['day'] as DateTime).weekday
+                  ? 4
+                  : 3,
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 3),
                 child: Column(
@@ -71,7 +81,9 @@ class ChartState extends State<Chart> {
                         color: Color.fromRGBO(220, 220, 220, 1),
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      height: 80,
+                      height: !portrait
+                          ? MediaQuery.of(context).size.height * 0.5
+                          : MediaQuery.of(context).size.height * 0.1,
                       width: 10,
                       child: FractionallySizedBox(
                         alignment: Alignment.bottomCenter,
@@ -98,7 +110,6 @@ class ChartState extends State<Chart> {
             );
           }).toList(),
         ),
-        width: double.maxFinite,
       ),
     );
   }

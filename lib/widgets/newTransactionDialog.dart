@@ -69,7 +69,7 @@ class _NewTransactionDialogState extends State<NewTransactionDialog> {
                   child: Text(
                       "Date: ${selectedDate == null ? "No date chosen" : DateFormat.yMMMMEEEEd().format(selectedDate)}"),
                 ),
-                FlatButton(
+                TextButton(
                   onPressed: displayDatePicker,
                   child: Text(
                     'Choose date',
@@ -79,12 +79,15 @@ class _NewTransactionDialogState extends State<NewTransactionDialog> {
               ],
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: addTransaction,
             child: Text("Add Transaction"),
-            textColor: Colors.white,
-            color: Theme.of(context).primaryColor,
-            elevation: 10,
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(Colors.white),
+              backgroundColor:
+                  MaterialStateProperty.all(Theme.of(context).primaryColor),
+              elevation: MaterialStateProperty.all(10),
+            ),
           ),
         ],
       ),

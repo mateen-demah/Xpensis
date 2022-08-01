@@ -1,21 +1,48 @@
 import 'package:flutter/cupertino.dart';
+import 'package:xpensis/database/transactionsDB.dart';
 import 'package:xpensis/models/transaction.dart';
 
 class TransactionListProvider with ChangeNotifier {
   List<Transaction> transactions = [];
+  var firstBuild = true;
 
-  void deleteTransaction(String id) {
-    transactions.removeWhere((element) => element.id == id);
+  bool get gfirstbuild {
+    return firstBuild;
+  }
+
+  void set sfirstbuild(bool status) {
+    firstBuild = status;
+  }
+
+  void initialiseList() async {
+    final txMaps = await TransactionsDb.instance.readAll();
+    transactions.addAll(txMaps.map((txMap) => Transaction.fromJson(txMap)));
     notifyListeners();
   }
 
-  void addTransaction({title, amount, selectedDate}) {
-    final newTransaction = Transaction(
-        id: DateTime.now().toString(),
-        name: title,
-        amount: amount,
-        date: selectedDate);
-    transactions.add(newTransaction);
+  void deleteTransaction(int id) async {
+    final successful = await TransactionsDb.instance.delete(id);
+    if (successful) {
+      transactions.removeWhere((element) => element.id == id);
+      notifyListeners();
+    } else
+      print('deletion doesn\'t work !!!!!!!!111');
+  }
+
+  void addTransaction({title, amount, DateTime selectedDate}) async {
+    final newTx = {
+      'title': title,
+      'amount': amount,
+      'time': selectedDate.toIso8601String(),
+      'notes': ''
+    };
+
+    final id = await TransactionsDb.instance.insert(newTx);
+    print(
+        '================================================the id after insert');
+    print(id);
+    newTx['id'] = id;
+    transactions.insert(0, Transaction.fromJson(newTx));
     notifyListeners();
   }
 

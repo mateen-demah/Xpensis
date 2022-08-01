@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:xpensis/database/transactionsDB.dart';
 import 'package:xpensis/providers/transactionListProvider.dart';
 
 class TransactionList extends StatefulWidget {
@@ -10,15 +11,26 @@ class TransactionList extends StatefulWidget {
 
 class TransactionListState extends State<TransactionList> {
   TransactionListProvider transactionListProvider;
+  //bool firstbuild = true;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    transactionListProvider = Provider.of<TransactionListProvider>(context);
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    TransactionsDb.instance.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    transactionListProvider = Provider.of<TransactionListProvider>(context);
+    if (transactionListProvider.gfirstbuild) {
+      transactionListProvider.initialiseList();
+      transactionListProvider.sfirstbuild = false;
+    }
     return transactionListProvider.transactions.isEmpty
         ? Flexible(
             fit: FlexFit.loose,
@@ -68,7 +80,7 @@ class TransactionListState extends State<TransactionList> {
                         ),
                       ),
                       title: Text(
-                        transactionListProvider.transactions[index].name,
+                        transactionListProvider.transactions[index].title,
                       ),
                       subtitle: Text(
                         DateFormat.MMMMEEEEd().format(

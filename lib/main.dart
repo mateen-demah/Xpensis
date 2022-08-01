@@ -34,20 +34,29 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   void startNewTransactionDialog() {
     showModalBottomSheet(
+      isScrollControlled: true,
       elevation: 6,
       //barrierColor: Theme.of(context).accentColor,
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      builder: (BuildContext context) => NewTransactionDialog(),
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: NewTransactionDialog(),
+          ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    print(
-        '${MediaQuery.of(context).size.height} ${MediaQuery.of(context).size.width}');
     final portrait =
         MediaQuery.of(context).size.height > MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(

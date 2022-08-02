@@ -1,13 +1,18 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 class Transaction extends Equatable {
   int id;
   String title;
   DateTime time;
-  String notes;
   double amount;
 
-  Transaction({this.id, this.title, this.time, this.notes, this.amount});
+  Transaction({
+    @required this.id,
+    @required this.title,
+    @required this.time,
+    @required this.amount,
+  });
 
   Transaction.fromJson(Map<String, Object> json) {
     this.id = json['id'];
@@ -22,16 +27,6 @@ class Transaction extends Equatable {
         'time': this.time.toIso8601String(),
         'amount': this.amount,
       };
-
-  // @override
-  // bool operator ==(Object other) =>
-  //     identical(this, other) ||
-  //     other is Transaction &&
-  //         runtimeType == other.runtimeType &&
-  //         id == other.id;
-
-  // @override
-  // int get hashCode => id.hashCode;
 
   @override
   List<Object> get props => [id];

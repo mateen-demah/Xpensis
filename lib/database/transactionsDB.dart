@@ -2,11 +2,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class TransactionsDb {
-  static final TransactionsDb instance = TransactionsDb.init();
+  static final TransactionsDb _instance = TransactionsDb();
   static Database transactionsDb;
   static final tableName = 'transactions';
 
-  TransactionsDb.init();
+  TransactionsDb();
 
   Future<Database> get database async {
     if (transactionsDb != null) return transactionsDb;
@@ -17,8 +17,6 @@ class TransactionsDb {
   Future<Database> initialiseDb(String dbFileName) async {
     final dir = await getDatabasesPath();
     final dbPath = join(dir, dbFileName);
-    print('================================================1');
-    print(dbPath);
     return await openDatabase(dbPath, version: 1, onCreate: createDb);
   }
 
@@ -32,7 +30,7 @@ class TransactionsDb {
   }
 
   Future<int> insert(Map<String, Object> transaction) async {
-    final db = await instance.database;
+    final db = await _instance.database;
     final id = await db.insert(
       tableName,
       transaction,
@@ -41,13 +39,13 @@ class TransactionsDb {
   }
 
   Future<List<Map<String, Object>>> readAll() async {
-    final db = await instance.database;
+    final db = await _instance.database;
     final txList = await db.query(tableName, orderBy: 'time DESC');
     return txList;
   }
 
   Future<bool> delete(int id) async {
-    final db = await instance.database;
+    final db = await _instance.database;
     final rowsDeleted = await db.delete(
       tableName,
       where: 'id = ?',
@@ -57,7 +55,7 @@ class TransactionsDb {
   }
 
   Future<void> close() async {
-    final db = await instance.database;
+    final db = await _instance.database;
     db.close();
   }
 }

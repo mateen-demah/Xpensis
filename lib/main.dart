@@ -5,6 +5,7 @@ import 'package:xpensis/widgets/transactionList.dart';
 
 import "./widgets/chart.dart";
 import './widgets/newTransactionDialog.dart';
+import 'database/transactionsDB.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => TransactionListProvider()),
+        ChangeNotifierProvider(
+            create: (context) => TransactionListProvider(TransactionsDb())),
       ],
       child: MaterialApp(
         title: "Xpensis",

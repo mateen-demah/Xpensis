@@ -11,6 +11,7 @@ class TransactionList extends StatefulWidget {
 
 class TransactionListState extends State<TransactionList> {
   TransactionListProvider transactionListProvider;
+  final TransactionsDb database = TransactionsDb();
   //bool firstbuild = true;
 
   @override
@@ -20,7 +21,7 @@ class TransactionListState extends State<TransactionList> {
 
   @override
   void dispose() {
-    TransactionsDb.instance.close();
+    database.close();
     super.dispose();
   }
 
@@ -84,7 +85,7 @@ class TransactionListState extends State<TransactionList> {
                       ),
                       subtitle: Text(
                         DateFormat.MMMMEEEEd().format(
-                            transactionListProvider.transactions[index].date),
+                            transactionListProvider.transactions[index].time),
                       ),
                       trailing: IconButton(
                         icon: Icon(

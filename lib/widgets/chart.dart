@@ -20,16 +20,16 @@ class ChartState extends State<Chart> {
 
   List<Map<String, Object>> get groupedTransactions {
     return List.generate(7, (index) {
-      final date = DateTime.now().subtract(Duration(days: index));
+      final time = DateTime.now().subtract(Duration(days: index));
       final daySpending = transactionListProvider.recentTransactions.fold(
         0.0,
         (prev, trans) {
-          final transAmount = trans.date.day == date.day ? trans.amount : 0;
+          final transAmount = trans.time.day == time.day ? trans.amount : 0;
           return transAmount + prev;
         },
       );
       return {
-        'day': date,
+        'day': time,
         'amount': daySpending,
         'fractionOfWeekSpending':
             transactionListProvider.recentTransactions.length > 0

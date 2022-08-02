@@ -5,6 +5,9 @@ import 'package:xpensis/models/transaction.dart';
 class TransactionListProvider with ChangeNotifier {
   List<Transaction> transactions = [];
   var firstBuild = true;
+  final TransactionsDb database;
+
+  TransactionListProvider(this.database);
 
   bool get gfirstbuild {
     return firstBuild;
@@ -15,32 +18,22 @@ class TransactionListProvider with ChangeNotifier {
   }
 
   void initialiseList() async {
-    final txMaps = await TransactionsDb.instance.readAll();
+    final txMaps = await database.readAll();
     transactions.addAll(txMaps.map((txMap) => Transaction.fromJson(txMap)));
     notifyListeners();
   }
 
   void deleteTransaction(int id) async {
-    final successful = await TransactionsDb.instance.delete(id);
+    final successful = await database.delete(id);
     if (successful) {
       transactions.removeWhere((element) => element.id == id);
       notifyListeners();
     } else
-      print('deletion doesn\'t work !!!!!!!!111');
+      throw (Exception("Failed to delete from db"));
   }
 
-  void addTransaction({title, amount, DateTime selectedDate}) async {
-    final newTx = {
-      'title': title,
-      'amount': amount,
-      'time': selectedDate.toIso8601String(),
-      'notes': ''
-    };
-
-    final id = await TransactionsDb.instance.insert(newTx);
-    print(
-        '================================================the id after insert');
-    print(id);
+  void addTransaction(Map<String, Object> newTx) async {
+    final id = await database.insert(newTx);
     newTx['id'] = id;
     transactions.insert(0, Transaction.fromJson(newTx));
     notifyListeners();
@@ -48,7 +41,7 @@ class TransactionListProvider with ChangeNotifier {
 
   List<Transaction> get recentTransactions {
     return transactions
-        .where((transaction) => transaction.date
+        .where((transaction) => transaction.time
             .isAfter(DateTime.now().subtract(Duration(days: 7))))
         .toList();
   }

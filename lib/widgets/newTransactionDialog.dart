@@ -31,14 +31,12 @@ class _NewTransactionDialogState extends State<NewTransactionDialog> {
 
     final transactionListProvider =
         Provider.of<TransactionListProvider>(context, listen: false);
-    print('================================================1');
-    transactionListProvider.addTransaction(
-      title: titleController.text,
-      amount: double.parse(amountController.text),
-      selectedDate: selectedDate,
-    );
-
-    print('================================================2');
+    final newTx = {
+      'title': titleController.text,
+      'amount': double.parse(amountController.text),
+      'time': selectedDate.toIso8601String(),
+    };
+    transactionListProvider.addTransaction(newTx);
     Navigator.of(context).pop();
   }
 

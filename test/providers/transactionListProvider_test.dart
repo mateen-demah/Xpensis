@@ -7,8 +7,6 @@ import 'package:xpensis/providers/transactionListProvider.dart';
 
 class MockTransactionsDb extends Mock implements TransactionsDb {}
 
-class MockTransaction extends Mock implements Transaction {}
-
 void main() {
   TransactionListProvider sut;
   MockTransactionsDb mockTransactionsDb;

@@ -3,8 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xpensis/providers/transactionListProvider.dart';
 
-import '../models/transaction.dart';
-
 class Chart extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ChartState();

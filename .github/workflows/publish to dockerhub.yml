@@ -1,0 +1,10 @@
+name: Build and publish docker image to docker hub
+
+on:
+  workflow_run:
+    workflows:
+      - "Xpensis_unit_test_workflow"
+    types:
+      - "completed"
+
+jobs:

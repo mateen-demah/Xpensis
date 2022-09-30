@@ -28,7 +28,7 @@ jobs:
       - name: Run unit tests
         run: flutter test --coverage
 
-      - name: Upload to code coverage
+      - name: Upload coverage to codecov
         uses: codecov/codecov-action@v1.2.2
         with:
           file: coverage/lcov.info

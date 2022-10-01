@@ -6,6 +6,7 @@ on:
       - "Xpensis_unit_test_workflow"
     types:
       - "completed"
+  workflow_dispatch:
 
 jobs:
   docker:
@@ -29,6 +30,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
       
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2

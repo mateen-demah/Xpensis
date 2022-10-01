@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     
 jobs:
-  build:
+  testing:
     runs-on: windows-latest
     steps:
       - name: Checkout code
